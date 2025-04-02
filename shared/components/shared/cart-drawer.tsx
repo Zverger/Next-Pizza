@@ -19,7 +19,7 @@ interface Props {
   totalAmount: number;
 }
 
-export const CardDrawer: FC<PropsWithChildren<Props>> = ({
+export const CartDrawer: FC<PropsWithChildren<Props>> = ({
   children,
   totalAmount,
 }) => {

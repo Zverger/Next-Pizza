@@ -1,2 +1,2 @@
+export * from "./bisnes";
 export * from "./utils";
-export * from "./bissnesUtils";

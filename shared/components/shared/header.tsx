@@ -6,7 +6,7 @@ import { Button } from "../ui/index";
 import { User } from "lucide-react";
 import { SearchInput } from "./seacrh-input";
 import Link from "next/link";
-import { CardButton } from "./card-button";
+import { CardButton } from "./cart-button";
 interface HeaderProps {
   className?: string;
 }

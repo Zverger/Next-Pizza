@@ -1,15 +1,15 @@
 import { cn } from "@/shared/lib";
 import { ShoppingCart, ArrowRight } from "lucide-react";
 import { Button } from "@/shared/components/ui";
-import { CardDrawer } from "./card-drawer";
+import { CartDrawer } from "./cart-drawer";
 
 interface Props {
   className?: string;
 }
 
-export function CardButton(props: Props) {
+export function CartButton(props: Props) {
   return (
-    <CardDrawer totalAmount={520}>
+    <CartDrawer totalAmount={520}>
       <Button className="group relative">
         <b>520 ₽</b>
         <span className="h-full w-[1px] bg-white/30 mx-3" />
@@ -22,6 +22,6 @@ export function CardButton(props: Props) {
           className="absolute right-5 transition duration-300 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"
         />
       </Button>
-    </CardDrawer>
+    </CartDrawer>
   );
 }

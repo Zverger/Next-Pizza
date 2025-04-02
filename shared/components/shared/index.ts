@@ -25,5 +25,5 @@ export { ChooseProductForm } from "./choose-product-form";
 export { ChoosePizzaForm } from "./choose-pizza-form";
 export * from "./modals";
 export * from "./ingredient-item";
-export { CardButton } from "./card-button";
-export { CardDrawer } from "./card-drawer";
+export { CartButton } from "./cart-button";
+export { CartDrawer } from "./cart-drawer";
