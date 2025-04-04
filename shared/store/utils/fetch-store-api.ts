@@ -14,13 +14,13 @@ type SetState<State> = {
 export async function fetchStoreApi<State, DTO>(
   set: SetState<State | FetchableState>,
   get: () => State & FetchableState,
-  api: Promise<DTO>,
+  api: () => Promise<DTO>,
   rawDataSetter: (data: DTO) => State | Partial<State>
 ) {
   try {
     set({ loading: true, error: null, totalFetches: get().totalFetches + 1 });
-    const data = await api;
-
+    const data = await api();
+    console.log(data);
     set(rawDataSetter(data));
   } catch (error) {
     console.error(error);

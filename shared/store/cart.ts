@@ -38,12 +38,17 @@ export const useCartStore = create<CartState>((set, get) => ({
   totalAmount: 0,
   totalFetches: 0,
   fetchCartItems: async () =>
-    fetchStoreApi(set, get, Api.cart.getCart(), getCartDetails),
+    fetchStoreApi(
+      set,
+      get,
+      async () => await Api.cart.getCart(),
+      getCartDetails
+    ),
   updateItemQuantity: (id, quantity) =>
     fetchStoreApi(
       set,
       get,
-      Api.cart.updateCartQuantity(id, quantity),
+      async () => await Api.cart.updateCartQuantity(id, quantity),
       getCartDetails
     ),
   addCartItem: async () => {},

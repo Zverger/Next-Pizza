@@ -21,13 +21,23 @@ interface Props {
   className?: string;
   totalAmount?: number;
   items?: CartStateItem[];
+  updateItemQuantity?: (id: number, quantity: number) => Promise<void>;
 }
 
 export const CartDrawer: FC<PropsWithChildren<Props>> = ({
   totalAmount = 0,
   items = [],
   children,
+  updateItemQuantity,
 }) => {
+  const onClickCountBtn = (
+    id: number,
+    quantity: number,
+    type: "plus" | "minus"
+  ) => {
+    updateItemQuantity?.(id, type === "plus" ? quantity + 1 : quantity - 1);
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -52,6 +62,9 @@ export const CartDrawer: FC<PropsWithChildren<Props>> = ({
                 name={item.name}
                 price={item.price}
                 quantity={item.quantity}
+                onClickCountBtn={(type) =>
+                  onClickCountBtn(item.id, item.quantity, type)
+                }
               />
             </div>
           ))}

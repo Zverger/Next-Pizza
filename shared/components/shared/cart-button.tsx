@@ -11,10 +11,14 @@ interface Props {
 }
 
 export function CartButton(props: Props) {
-  const { items, totalAmount } = useCart();
+  const { items, totalAmount, updateItemQuantity } = useCart();
 
   return (
-    <CartDrawer items={items} totalAmount={totalAmount}>
+    <CartDrawer
+      items={items}
+      totalAmount={totalAmount}
+      updateItemQuantity={updateItemQuantity}
+    >
       <Button className="group relative">
         <b>{totalAmount} ₽</b>
         <span className="h-full w-[1px] bg-white/30 mx-3" />

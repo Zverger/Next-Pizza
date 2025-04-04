@@ -4,6 +4,7 @@ import { cn, getCartItemDetails } from "@/shared/lib";
 import * as CartItem from "./cart-item-details";
 import { CountButton } from "./count-button";
 import { TrashIcon } from "lucide-react";
+import { useCartStore } from "@/shared/store";
 
 interface CartDrawerItemProps {
   className?: string;
@@ -13,6 +14,7 @@ interface CartDrawerItemProps {
   price: number;
   quantity: number;
   details: string;
+  onClickCountBtn?: (type: "plus" | "minus") => void;
 }
 
 export const CartDrawerItem: FC<CartDrawerItemProps> = ({
@@ -23,6 +25,7 @@ export const CartDrawerItem: FC<CartDrawerItemProps> = ({
   price,
   quantity,
   details,
+  onClickCountBtn,
 }) => {
   return (
     <div className={cn(className, "flex bg-white p-5 gap-6")}>
@@ -31,7 +34,7 @@ export const CartDrawerItem: FC<CartDrawerItemProps> = ({
         <CartItem.Info name={name} details={details} />
         <hr className="my-3" />
         <div className="flex items-center justify-between">
-          <CountButton onClick={(type) => console.log(type)} value={quantity} />
+          <CountButton onClick={onClickCountBtn} value={quantity} />
           <div className="flex items-center justify-between">
             <CartItem.Price value={price} />
             <TrashIcon

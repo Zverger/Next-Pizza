@@ -7,7 +7,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = await Number(params.id);
+    const { id } = await params;
 
     const data = (await req.json()) as { quantity: number };
 
@@ -16,14 +16,14 @@ export async function PATCH(
       return NextResponse.json({ error: "Cart token not found" });
     }
     const cartItem = prisma.cartItem.findFirst({
-      where: { id },
+      where: { id: Number(id) },
     });
     if (!cartItem) {
       return NextResponse.json({ error: "Cart item not found" });
     }
 
     await prisma.cartItem.update({
-      where: { id },
+      where: { id: Number(id) },
       data: {
         quantity: data.quantity,
       },

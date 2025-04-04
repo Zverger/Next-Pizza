@@ -41,7 +41,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
               { name: "Средняя", value: "2" },
               { name: "Большая", value: "3" },
             ]}
-            selectedValue="2"
           />
         </div>
       </div>

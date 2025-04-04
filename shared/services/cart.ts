@@ -1,4 +1,3 @@
-import { Cart } from "@prisma/client";
 import { ApiRoutes } from "./constants";
 import { CartDTO } from "./dto/cart.dto";
 import { axiosInstance } from "./instance";

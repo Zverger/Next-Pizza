@@ -33,5 +33,20 @@ export const updateCartTotalAmount = async (token: string) => {
     data: {
       totalAmount,
     },
+    include: {
+      items: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          ingredients: true,
+          productItem: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      },
+    },
   });
 };
