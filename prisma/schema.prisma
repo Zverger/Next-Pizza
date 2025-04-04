@@ -2,10 +2,12 @@ generator client {
     provider = "prisma-client-js"
 }
 
+
 datasource db {
     provider = "postgresql"
     url      = env("POSTGRES_URL")
 }
+
 
 model User {
     id Int @id @default(autoincrement())
@@ -59,7 +61,7 @@ model Ingredient {
     imageUrl String
 
     products Product[]
-    cartItem CartItem[]
+    cartItems CartItem[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -74,7 +76,7 @@ model ProductItem {
 
     product   Product    @relation(fields: [productId], references: [id])
     productId Int
-    cartItem  CartItem[]
+    cartItems  CartItem[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -89,7 +91,7 @@ model Cart {
     token       String
     totalAmount Int    @default(0)
 
-    cartItem CartItem[]
+    items CartItem[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

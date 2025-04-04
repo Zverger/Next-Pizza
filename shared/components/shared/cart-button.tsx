@@ -1,21 +1,26 @@
-import { cn } from "@/shared/lib";
+"use client";
 import { ShoppingCart, ArrowRight } from "lucide-react";
 import { Button } from "@/shared/components/ui";
 import { CartDrawer } from "./cart-drawer";
+import { useCartStore } from "@/shared/store";
+import { useEffect } from "react";
+import { useCart } from "@/shared/hooks/business/use-cart";
 
 interface Props {
   className?: string;
 }
 
 export function CartButton(props: Props) {
+  const { items, totalAmount } = useCart();
+
   return (
-    <CartDrawer totalAmount={520}>
+    <CartDrawer items={items} totalAmount={totalAmount}>
       <Button className="group relative">
-        <b>520 ₽</b>
+        <b>{totalAmount} ₽</b>
         <span className="h-full w-[1px] bg-white/30 mx-3" />
         <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
           <ShoppingCart size={16} className="retative" strokeWidth={2} />
-          <b>3</b>
+          <b>{items.length}</b>
         </div>
         <ArrowRight
           size={20}

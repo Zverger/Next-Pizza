@@ -1,10 +1,10 @@
-import { cn } from "@/shared/lib";
+"use client";
+
+import { getCartItemDetails } from "@/shared/lib";
 
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetTitle,
   SheetHeader,
   SheetTrigger,
   SheetFooter,
@@ -13,24 +13,48 @@ import {
 import { FC, PropsWithChildren } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { CartDrawerItem } from "./cart-drawer-item";
+
+import { CartStateItem } from "@/shared/store";
 
 interface Props {
   className?: string;
-  totalAmount: number;
+  totalAmount?: number;
+  items?: CartStateItem[];
 }
 
 export const CartDrawer: FC<PropsWithChildren<Props>> = ({
+  totalAmount = 0,
+  items = [],
   children,
-  totalAmount,
 }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#F4F1EE]">
         <SheetHeader>
-          В корзине <span className="font-bold-3">3 товара</span>
+          В корзине <span className="font-bold-3">три товарища</span>
         </SheetHeader>
-        {/*Items */}
+        <div className="-mx-6 mt-5 overflow-auto flex-1">
+          {items.map((item) => (
+            <div className="mb-2">
+              <CartDrawerItem
+                key={item.id}
+                id={item.id}
+                imageUrl={item.imageUrl}
+                details={getCartItemDetails(
+                  item.pizzaType,
+                  item.pizzaSize,
+                  item.ingedients
+                )}
+                name={item.name}
+                price={item.price}
+                quantity={item.quantity}
+              />
+            </div>
+          ))}
+        </div>
+
         <SheetFooter className="-mx-6 bg-white p-8">
           <div className="w-full">
             <div className="flex mb-4">

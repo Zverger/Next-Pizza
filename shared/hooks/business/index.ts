@@ -1,2 +1,2 @@
-export { useFilterSearch } from "./useFilterSearch";
-export { useQueryFilterRouter } from "./useQueryFilterRouter";
+export * from "./use-filter-search";
+export * from "./use-query-filter-router";

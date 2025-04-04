@@ -6,7 +6,7 @@ import { Button } from "../ui/index";
 import { User } from "lucide-react";
 import { SearchInput } from "./seacrh-input";
 import Link from "next/link";
-import { CardButton } from "./cart-button";
+import { CartButton } from "./cart-button";
 interface HeaderProps {
   className?: string;
 }
@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
             <User size={16} />
             Войти
           </Button>
-          <CardButton />
+          <CartButton />
         </div>
       </Container>
     </header>
