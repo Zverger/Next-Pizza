@@ -33,13 +33,15 @@ export const CartDrawer: FC<PropsWithChildren<Props>> = ({
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#F4F1EE]">
         <SheetHeader>
-          В корзине <span className="font-bold-3">три товарища</span>
+          В корзине
+          <span className="font-bold-3">
+            {items.reduce((acc, item) => acc + item.quantity, 0)} товара
+          </span>
         </SheetHeader>
         <div className="-mx-6 mt-5 overflow-auto flex-1">
           {items.map((item) => (
-            <div className="mb-2">
+            <div className="mb-2" key={item.id}>
               <CartDrawerItem
-                key={item.id}
                 id={item.id}
                 imageUrl={item.imageUrl}
                 details={getCartItemDetails(

@@ -74,7 +74,9 @@ export const ChoosePizzaForm: React.FC<Props> = ({
             onClick={(s) => {
               setSize(s);
               !itemsTypesGroupBySizes[s]?.has(type) &&
-                setType(itemsTypesGroupBySizes[s]?.values().next().value);
+                setType(
+                  itemsTypesGroupBySizes[s]?.values().next().value as 1 | 2
+                );
             }}
             onAvailable={(s) => Boolean(itemsTypesGroupBySizes[s])}
           />
