@@ -1,14 +1,16 @@
 "use client";
 import { cn } from "@/shared/lib";
 import { CountIconButton } from "./count-icon-button";
-import { FC } from "react";
+import { FC, ReactElement } from "react";
 
 export interface CountButtonProps {
+  loading?: boolean;
   value?: number;
   size?: "sm" | "lg";
   onClick?: (type: "plus" | "minus") => void;
   className?: string;
   classNameIcons?: string;
+  children?: ReactElement;
 }
 
 export const CountButton: FC<CountButtonProps> = ({
@@ -17,6 +19,8 @@ export const CountButton: FC<CountButtonProps> = ({
   onClick,
   className,
   classNameIcons,
+  loading,
+  children = <div className="bg-gray-400 w-4" />,
 }) => {
   return (
     <div
@@ -32,7 +36,11 @@ export const CountButton: FC<CountButtonProps> = ({
         type="minus"
         className={classNameIcons}
       />
-      <b className={size === "sm" ? "text-sm" : "text-md"}>{value}</b>
+      {loading ? (
+        children
+      ) : (
+        <b className={size === "sm" ? "text-sm" : "text-md"}>{value}</b>
+      )}
       <CountIconButton
         onClick={() => onClick?.("plus")}
         size={size}

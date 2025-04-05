@@ -16,28 +16,32 @@ export type CartStateItem = {
   ingedients: Array<{ name: string; price: number }>;
 };
 
+type FetchId = number;
+
 export interface CartState {
-  loading: boolean;
+  isLoading: (fetchId: number | null) => boolean;
   error: Error | null | unknown;
   totalAmount: number;
+  fetchesSet: Set<number>;
   items: CartStateItem[];
   totalFetches: number;
 
   /*Получение списка товаров из корзины */
-  fetchCartItems: () => Promise<void>;
+  fetchCartItems: () => FetchId;
   /*запрос на обновление кол-во товара в корзину */
-  updateItemQuantity: (id: number, quantity: number) => Promise<void>;
-  addCartItem: (values: any) => Promise<void>; //типизировать values
-  removeCartItem: (id: number) => Promise<void>;
+  updateItemQuantity: (id: number, quantity: number) => FetchId;
+  addCartItem: (values: any) => FetchId; //типизировать values
+  removeCartItem: (id: number) => FetchId;
 }
 
 export const useCartStore = create<CartState>((set, get) => ({
   items: [],
   error: null,
-  loading: true,
+  isLoading: (fetchId) => (fetchId ? get().fetchesSet.has(fetchId) : false),
   totalAmount: 0,
+  fetchesSet: new Set<number>(),
   totalFetches: 0,
-  fetchCartItems: async () =>
+  fetchCartItems: () =>
     fetchStoreApi(
       set,
       get,
@@ -51,6 +55,6 @@ export const useCartStore = create<CartState>((set, get) => ({
       async () => await Api.cart.updateCartQuantity(id, quantity),
       getCartDetails
     ),
-  addCartItem: async () => {},
-  removeCartItem: async () => {},
+  addCartItem: () => 0,
+  removeCartItem: () => 0,
 }));

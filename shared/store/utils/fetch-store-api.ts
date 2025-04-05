@@ -1,7 +1,7 @@
 type FetchableState = {
-  loading: boolean;
   error: Error | null | unknown;
   totalFetches: number;
+  fetchesSet: Set<number>;
 };
 
 type SetState<State> = {
@@ -11,14 +11,16 @@ type SetState<State> = {
   (state: State | ((state: State) => State)): void;
 };
 
-export async function fetchStoreApi<State, DTO>(
+async function fetchApi<State, DTO>(
   set: SetState<State | FetchableState>,
   get: () => State & FetchableState,
   api: () => Promise<DTO>,
-  rawDataSetter: (data: DTO) => State | Partial<State>
+  rawDataSetter: (data: DTO) => State | Partial<State>,
+  fetchId: number
 ) {
   try {
-    set({ loading: true, error: null, totalFetches: get().totalFetches + 1 });
+    get().fetchesSet.add(fetchId);
+    set({ error: null, totalFetches: get().totalFetches + 1 });
     const data = await api();
     console.log(data);
     set(rawDataSetter(data));
@@ -26,11 +28,20 @@ export async function fetchStoreApi<State, DTO>(
     console.error(error);
     set({ error });
   } finally {
-    const totalFetches = get().totalFetches - 1;
-    if (get().totalFetches > 0) {
-      set({ totalFetches });
-    } else {
-      set({ loading: false, totalFetches: 0 });
-    }
+    get().fetchesSet.delete(fetchId);
   }
+}
+
+export function fetchStoreApi<State, DTO>(
+  set: SetState<State | FetchableState>,
+  get: () => State & FetchableState,
+  api: () => Promise<DTO>,
+  rawDataSetter: (data: DTO) => State | Partial<State>
+) {
+  const fetchId = get().totalFetches;
+
+  set({ totalFetches: fetchId + 1 });
+
+  fetchApi(set, get, api, rawDataSetter, fetchId);
+  return fetchId;
 }

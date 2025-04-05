@@ -12,3 +12,4 @@ export * from "./slider";
 
 export * from "./sheet";
 export * from "./visually-hidden";
+export * from "./loaders";
