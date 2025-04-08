@@ -16,7 +16,7 @@ interface SearchInputProps {
 export const SearchInput: FC<SearchInputProps> = ({ className }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [focused, setFocused] = useState<boolean>(false);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[] | null>();
   const ref = useRef<HTMLDivElement>(null);
   useClickAway(ref, () => {
     setFocused(false);
@@ -40,7 +40,7 @@ export const SearchInput: FC<SearchInputProps> = ({ className }) => {
   const onClickItem = () => {
     setFocused(false);
     setSearchQuery("");
-    setProducts([]);
+    setProducts(null);
   };
 
   const onSearchProduct = (query: string) => {
@@ -69,14 +69,14 @@ export const SearchInput: FC<SearchInputProps> = ({ className }) => {
           value={searchQuery}
           onChange={(e) => onSearchProduct(e.target.value)}
         />
-        {products.length > 0 && (
+        {products?.length && (
           <div
             className={cn(
               "absolute w-full bg-white py-2 top-14 shawod-md transition-all duration-200 invisible opacity-0 z-30",
               focused && "visible opacity-100 top-12"
             )}
           >
-            {products.map((product) => (
+            {products?.map((product) => (
               <Link
                 key={product.id}
                 href={`/product/${product.id}`}

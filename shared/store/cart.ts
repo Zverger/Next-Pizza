@@ -20,10 +20,12 @@ type FetchId = number;
 
 export interface CartState {
   isLoading: (fetchId: number | null) => boolean;
+  isFetching: () => boolean;
   error: Error | null | unknown;
   totalAmount: number;
   fetchesSet: Set<number>;
   items: CartStateItem[];
+
   totalFetches: number;
 
   /*Получение списка товаров из корзины */
@@ -36,8 +38,10 @@ export interface CartState {
 
 export const useCartStore = create<CartState>((set, get) => ({
   items: [],
+
   error: null,
   isLoading: (fetchId) => (fetchId ? get().fetchesSet.has(fetchId) : false),
+  isFetching: () => get().fetchesSet.size > 0,
   totalAmount: 0,
   fetchesSet: new Set<number>(),
   totalFetches: 0,
@@ -56,5 +60,11 @@ export const useCartStore = create<CartState>((set, get) => ({
       getCartDetails
     ),
   addCartItem: () => 0,
-  removeCartItem: () => 0,
+  removeCartItem: (id) =>
+    fetchStoreApi(
+      set,
+      get,
+      async () => await Api.cart.removeCartItem(id),
+      getCartDetails
+    ),
 }));

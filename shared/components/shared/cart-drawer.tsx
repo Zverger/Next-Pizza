@@ -15,7 +15,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { CartDrawerItem } from "./cart-drawer-item";
 
-import { CartStateItem } from "@/shared/store";
+import { CartStateItem, useCartStore } from "@/shared/store";
 
 interface Props {
   className?: string;
@@ -28,15 +28,21 @@ export const CartDrawer: FC<PropsWithChildren<Props>> = ({
   items = [],
   children,
 }) => {
+  const isFetching = useCartStore((state) => state.isFetching);
+  const loading = isFetching();
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#F4F1EE]">
         <SheetHeader>
           В корзине
-          <span className="font-bold-3">
-            {items.reduce((acc, item) => acc + item.quantity, 0)} товара
-          </span>
+          {loading ? (
+            <div className=" w-5 h-5 grid rounded-[50%] border-gray-200 border-solid border-2 border-t-black animate-spin"></div>
+          ) : (
+            <span className="font-bold-3">
+              {items.reduce((acc, item) => acc + item.quantity, 0)} товара
+            </span>
+          )}
         </SheetHeader>
         <div className="-mx-6 mt-5 overflow-auto flex-1">
           {items.map((item) => (

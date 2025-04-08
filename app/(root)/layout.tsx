@@ -16,6 +16,7 @@ export default function RootLayout({
     <main className="min-h-screen relative">
       {modal}
       <Header />
+
       {children}
     </main>
   );

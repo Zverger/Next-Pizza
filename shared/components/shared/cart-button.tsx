@@ -2,8 +2,7 @@
 import { ShoppingCart, ArrowRight } from "lucide-react";
 import { Button } from "@/shared/components/ui";
 import { CartDrawer } from "./cart-drawer";
-import { useCartStore } from "@/shared/store";
-import { useEffect } from "react";
+
 import { useCart } from "@/shared/hooks/business/use-cart";
 
 interface Props {

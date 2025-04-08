@@ -62,6 +62,7 @@ const SheetContent = React.forwardRef<
     <SheetOverlay />
     <VisuallyHidden>
       <SheetPrimitive.DialogTitle />
+      <SheetPrimitive.DialogDescription />
     </VisuallyHidden>
     <SheetPrimitive.Content
       ref={ref}

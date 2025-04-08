@@ -1,41 +1,39 @@
+"use client";
 import { FC } from "react";
+import StyledWrapper from "./styled-wrapper";
 import { cn } from "@/shared/lib";
-import css from "./hamster-loader.module.css";
+
 interface HamsterLoaderProps {
   className?: string;
 }
 
 export const HamsterLoader: FC<HamsterLoaderProps> = ({ className }) => {
   return (
-    <div
-      aria-label="Orange and tan hamster running in a metal wheel"
-      role="img"
-      className={css["wheel-and-hamster"]}
-    >
-      <div className={css.wheel}></div>
-      <div className={css.hamster}>
-        <div className={css.hamster__body}>
-          <div className={css.hamster__head}>
-            <div className={css.hamster__ear}></div>
-            <div className={css.hamster__eye}></div>
-            <div className={css.hamster__nose}></div>
+    <div className="relative min-w-1 min-h-1 text-sm shrink ">
+      <StyledWrapper>
+        <div
+          aria-label="Orange and tan hamster running in a metal wheel"
+          role="img"
+          className={"wheel-and-hamster "}
+        >
+          <div className="wheel" />
+          <div className="hamster">
+            <div className="hamster__body">
+              <div className="hamster__head">
+                <div className="hamster__ear" />
+                <div className="hamster__eye" />
+                <div className="hamster__nose" />
+              </div>
+              <div className="hamster__limb hamster__limb--fr" />
+              <div className="hamster__limb hamster__limb--fl" />
+              <div className="hamster__limb hamster__limb--br" />
+              <div className="hamster__limb hamster__limb--bl" />
+              <div className="hamster__tail" />
+            </div>
           </div>
-          <div
-            className={`${css.hamster__limb} ${css["hamster__limb--fr"]}`}
-          ></div>
-          <div
-            className={`${css.hamster__limb} ${css["hamster__limb--fl"]}`}
-          ></div>
-          <div
-            className={`${css.hamster__limb} ${css["hamster__limb--br"]}`}
-          ></div>
-          <div
-            className={`${css.hamster__limb} ${css["hamster__limb--bl"]}`}
-          ></div>
-          <div className={css.hamster__tail}></div>
+          <div className="spoke" />
         </div>
-      </div>
-      <div className={css.spoke}></div>
+      </StyledWrapper>
     </div>
   );
 };
