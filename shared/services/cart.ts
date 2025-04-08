@@ -17,11 +17,16 @@ export const removeCartItem = async (id: number) =>
 
 export const addCartItem = async (
   productItemId: number,
-  ingredients: number[]
+  ingredients?: number[]
 ) =>
   (
-    await axiosInstance.post<CartDTO>(ApiRoutes.CART, {
-      productItemId,
-      ingredients,
-    })
+    await axiosInstance.post<CartDTO>(
+      ApiRoutes.CART,
+      ingredients
+        ? {
+            productItemId,
+            ingredients,
+          }
+        : { productItemId }
+    )
   ).data;
