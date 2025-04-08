@@ -14,3 +14,14 @@ export const updateCartQuantity = async (
 
 export const removeCartItem = async (id: number) =>
   (await axiosInstance.delete<CartDTO>(ApiRoutes.CART + `/${id}`)).data;
+
+export const addCartItem = async (
+  productItemId: number,
+  ingredients: number[]
+) =>
+  (
+    await axiosInstance.post<CartDTO>(ApiRoutes.CART, {
+      productItemId,
+      ingredients,
+    })
+  ).data;

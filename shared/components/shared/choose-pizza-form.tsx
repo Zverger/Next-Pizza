@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 
 import Title from "./title";
 import { Button } from "@/shared/components/ui";
@@ -26,7 +26,7 @@ interface Props {
   name: string;
   ingredients?: Ingredient[];
   items?: ProductItem[];
-  onClickAddCart?: VoidFunction;
+  onClickAddCart?: (productId: number | null, ingredientsId?: number[]) => void;
   className?: string;
 }
 
@@ -38,10 +38,12 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   onClickAddCart,
   items = [],
 }) => {
-  const handleClick = () => {};
-
   const [type, setType] = useState<PizzaType>(1);
   const [size, setSize] = useState<PizzaSize>(20);
+  const selectedProductItemId =
+    items.find((item) => item.pizzaType === type && item.size === size)?.id ||
+    null;
+
   const [selectedIngredients, { toggle: toggleIngredient }] = useSet(
     new Set<number>()
   );
@@ -59,7 +61,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   const textDetails = `${size} см, ${mapPizzaType[type]} тесто`;
 
   const handleClickAdd = () => {
-    onClickAddCart?.();
+    onClickAddCart?.(selectedProductItemId, Array.from(selectedIngredients));
   };
   return (
     <div className={cn(className, "flex flex-1")}>
@@ -102,7 +104,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           </div>
         </div>
         <Button
-          onClick={handleClick}
+          onClick={handleClickAdd}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
         >
           Добавить в корзину за {totalPrice}

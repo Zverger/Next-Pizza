@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 
 interface GroupVariantsProps<T, V extends Variant<T>> {
   items: readonly V[];

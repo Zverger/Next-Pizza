@@ -32,7 +32,7 @@ export interface CartState {
   fetchCartItems: () => FetchId;
   /*запрос на обновление кол-во товара в корзину */
   updateItemQuantity: (id: number, quantity: number) => FetchId;
-  addCartItem: (values: any) => FetchId; //типизировать values
+  addCartItem: (productItemId: number, ingredientsId: number[]) => FetchId; //типизировать values
   removeCartItem: (id: number) => FetchId;
 }
 
@@ -59,7 +59,13 @@ export const useCartStore = create<CartState>((set, get) => ({
       async () => await Api.cart.updateCartQuantity(id, quantity),
       getCartDetails
     ),
-  addCartItem: () => 0,
+  addCartItem: (productItemId: number, ingredientsId: number[]) =>
+    fetchStoreApi(
+      set,
+      get,
+      async () => await Api.cart.addCartItem(productItemId, ingredientsId),
+      getCartDetails
+    ),
   removeCartItem: (id) =>
     fetchStoreApi(
       set,

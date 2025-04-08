@@ -1,7 +1,7 @@
 "use client";
 import React, { RefObject } from "react";
 import { Title } from "./title";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 import { ProductCard } from "./product-card";
 import { useIntersection } from "react-use";
 import { useCategoryStore } from "@/shared/store/category";
@@ -43,7 +43,6 @@ export const ProductGroupList: React.FC<ProductGroupListProps> = ({
             key={idx}
             id={product.id}
             name={product.name}
-            
             imageUrl={product.imageUrl}
             price={product.items[0].price}
           />

@@ -38,8 +38,7 @@ export function fetchStoreApi<State, DTO>(
   rawDataSetter: (data: DTO) => State | Partial<State>
 ) {
   const fetchId = get().totalFetches;
-  // set({ totalFetches: fetchId + 1})
-  set({ totalFetches: get().fetchesSet.size ? fetchId + 1 : 0 });
+  set({ totalFetches: fetchId < 255 ? fetchId + 1 : 0 });
   get().fetchesSet.add(fetchId);
 
   fetchApi(set, get, api, rawDataSetter, fetchId);

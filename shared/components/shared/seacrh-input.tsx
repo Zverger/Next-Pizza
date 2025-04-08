@@ -3,7 +3,7 @@
 import { Search } from "lucide-react";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { Input } from "../ui";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 import { useClickAway, useDebounce } from "react-use";
 import Link from "next/link";
 import { Api } from "@/shared/services/api-client";

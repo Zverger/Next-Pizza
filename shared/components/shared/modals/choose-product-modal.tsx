@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 
 import {
   Dialog,
@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import { ChoosePizzaForm, ChooseProductForm } from "@/shared/components/shared";
 import { IProduct } from "@/@types";
+import { useCartStore } from "@/shared/store";
 
 interface ChooseProductModalProps {
   className?: string;
@@ -25,6 +26,19 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
 }) => {
   const router = useRouter();
   const isPizzaForms = Boolean(product.items?.[0].pizzaType);
+  const addCartItem = useCartStore((state) => state.addCartItem);
+
+  const handleClickAddCartItem = (
+    productId: number | null,
+    ingredientsId: number[] = []
+  ) => {
+    console.log(1);
+    if (productId) {
+      addCartItem(productId, ingredientsId);
+      router.back();
+      console.log(2);
+    }
+  };
   return (
     <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
       <DialogContent
@@ -43,6 +57,7 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
             name={product.name}
             ingredients={product.ingredients}
             items={product.items}
+            onClickAddCart={handleClickAddCartItem}
           />
         ) : (
           <ChooseProductForm imageUrl={product.imageUrl} name={product.name} />
