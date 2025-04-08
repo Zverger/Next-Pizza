@@ -20,13 +20,8 @@ export const addCartItem = async (
   ingredients?: number[]
 ) =>
   (
-    await axiosInstance.post<CartDTO>(
-      ApiRoutes.CART,
-      ingredients
-        ? {
-            productItemId,
-            ingredients,
-          }
-        : { productItemId }
-    )
+    await axiosInstance.post<CartDTO>(ApiRoutes.CART, {
+      productItemId,
+      ingredients,
+    })
   ).data;

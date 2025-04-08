@@ -1,9 +1,8 @@
 import { prisma } from "@/prisma/prisma-client";
-import { findOrCreateUserCart } from "@/shared/lib";
+import { arrayIncludesAll, findOrCreateUserCart } from "@/shared/lib";
 import { updateCartTotalAmount } from "@/shared/lib/business/update-cart-total-amount";
 import { CreateCartItemValues } from "@/shared/services/dto";
 import { NextRequest, NextResponse } from "next/server";
-import { off } from "process";
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,8 +32,14 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json(userCart);
-  } catch (e) {
-    console.log(e);
+  } catch (error: any) {
+    console.log("[CART_GET] Server error");
+    console.error(error.message);
+
+    return NextResponse.json(
+      { message: "Не удалось найти корзину" },
+      { status: 500 }
+    );
   }
 }
 
@@ -49,19 +54,23 @@ export async function POST(req: NextRequest) {
     const userCart = await findOrCreateUserCart(token);
 
     const data = (await req.json()) as CreateCartItemValues;
-    console.log(data.ingredients);
-    const findCartItem = await prisma.cartItem.findFirst({
-      where: {
-        cartId: userCart.id,
-        productItemId: data.productItemId,
-
-        ingredients: {
-          every: {
-            id: { in: data.ingredients },
-          },
+    console.log(data.ingredients?.length);
+    const findCartItem = (
+      await prisma.cartItem.findMany({
+        where: {
+          cartId: userCart.id,
+          productItemId: data.productItemId,
         },
-      },
-    });
+        include: {
+          ingredients: true,
+        },
+      })
+    )?.find((item) =>
+      arrayIncludesAll(
+        item.ingredients.map((ing) => ing.id),
+        data.ingredients
+      )
+    );
 
     // Если товар был найден, делаем +1
     if (findCartItem) {
@@ -89,8 +98,10 @@ export async function POST(req: NextRequest) {
     const resp = NextResponse.json(updatedUserCart);
     resp.cookies.set("cartToken", token);
     return resp;
-  } catch (error) {
-    console.log("[CART_POST] Server error", error);
+  } catch (error: any) {
+    console.log("[CART_POST] Server error");
+    console.error(error.message);
+
     return NextResponse.json(
       { message: "Не удалось создать корзину" },
       { status: 500 }
