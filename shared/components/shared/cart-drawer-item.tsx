@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, useCallback, useState } from "react";
 import { cn } from "@/shared/lib";
 
 import * as CartItem from "./cart-item-details";
@@ -27,19 +27,25 @@ export const CartDrawerItem: FC<CartDrawerItemProps> = ({
   quantity,
   details,
 }) => {
-  const { updateItemQuantity, isLoading, removeCartItem } = useCartStore();
-  const fetchUpdateId = useRef<number>(null);
-  const loading = isLoading(fetchUpdateId.current);
-  const onClickCountBtn = (counted: number) => {
-    fetchUpdateId.current = updateItemQuantity?.(
-      id,
-      quantity + counted > 1 ? quantity + counted : 1
-    );
-  };
-  const onClickRemove = () => {
-    removeCartItem(id);
-  };
+  const [updateItemQuantity, loadingUpdate, errorUpdate] =
+    useCartStore().useUpdateItemQuantity(id);
 
+  const [removeCartItem, loadingRemove, errorRemove] =
+    useCartStore().useRemoveCartItem(id);
+
+  const onClickCountBtn = useCallback(
+    (counted: number, setCount: (c: number) => void) => {
+      const fetchId = updateItemQuantity?.(
+        quantity + counted > 1 ? quantity + counted : 1,
+        { onFinal: () => setCount(0) }
+      );
+    },
+    [id, quantity]
+  );
+  const onClickRemove = useCallback(() => {
+    removeCartItem();
+  }, [id]);
+  console.log(name, quantity);
   return (
     <div className={cn(className, "flex bg-white p-5 gap-6")}>
       <CartItem.Image src={imageUrl} />
@@ -50,12 +56,15 @@ export const CartDrawerItem: FC<CartDrawerItemProps> = ({
           <CountButton
             onCount={onClickCountBtn}
             value={quantity}
-            loading={loading}
+            loading={loadingUpdate || loadingRemove}
           >
             <SpinnerLoader />
           </CountButton>
           <div>
-            <CartItem.Price value={price} loading={loading} />
+            <CartItem.Price
+              value={price}
+              loading={loadingUpdate || loadingRemove}
+            />
             <TrashIcon
               onClick={onClickRemove}
               className="text-gray-400 cursor-pointer hover:text-gray-600"

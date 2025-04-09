@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { cn } from "@/shared/lib";
 
 import {
@@ -26,19 +26,28 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
 }) => {
   const router = useRouter();
   const isPizzaForms = Boolean(product.items?.[0].pizzaType);
-  const addCartItem = useCartStore((state) => state.addCartItem);
+  const [addCartItem, loadingAddCartItem, errorAddCartItem] =
+    useCartStore().useAddCartItem();
+  const abortBack = useRef(false);
 
   const handleClickAddCartItem = (
     productId?: number | null,
     ingredientsId?: number[]
   ) => {
     if (productId) {
-      addCartItem(productId, ingredientsId);
-      router.back();
+      addCartItem(productId, ingredientsId, {
+        onFinal: () => !abortBack.current && router.back(),
+      });
     }
   };
   return (
-    <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
+    <Dialog
+      open={Boolean(product)}
+      onOpenChange={() => {
+        abortBack.current = true;
+        router.back();
+      }}
+    >
       <DialogContent
         className={cn(
           className,
@@ -51,6 +60,7 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
 
         {isPizzaForms ? (
           <ChoosePizzaForm
+            loading={loadingAddCartItem}
             imageUrl={product.imageUrl}
             name={product.name}
             ingredients={product.ingredients}
@@ -59,6 +69,7 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
           />
         ) : (
           <ChooseProductForm
+            loading={loadingAddCartItem}
             imageUrl={product.imageUrl}
             name={product.name}
             items={product.items}

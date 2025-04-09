@@ -31,6 +31,7 @@ interface Props {
     ingredientsId?: number[]
   ) => void;
   className?: string;
+  loading: boolean;
 }
 
 export const ChoosePizzaForm: React.FC<Props> = ({
@@ -40,6 +41,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   ingredients = [],
   onClickAddCart,
   items = [],
+  loading,
 }) => {
   const [type, setType] = useState<PizzaType>(1);
   const [size, setSize] = useState<PizzaSize>(20);
@@ -107,6 +109,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           </div>
         </div>
         <Button
+          loading={loading}
           onClick={handleClickAdd}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
         >

@@ -10,7 +10,7 @@ import {
   SheetFooter,
   Button,
 } from "@/shared/components/ui";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useCallback, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { CartDrawerItem } from "./cart-drawer-item";
@@ -30,6 +30,7 @@ export const CartDrawer: FC<PropsWithChildren<Props>> = ({
 }) => {
   const isFetching = useCartStore((state) => state.isFetching);
   const loading = isFetching();
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>

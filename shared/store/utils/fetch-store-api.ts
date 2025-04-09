@@ -1,7 +1,9 @@
+import { useState } from "react";
+
 type FetchableState = {
   error: Error | null | unknown;
-  totalFetches: number;
-  fetchesSet: Set<number>;
+
+  fetchesSet: Set<string>;
 };
 
 type SetState<State> = {
@@ -11,23 +13,33 @@ type SetState<State> = {
   (state: State | ((state: State) => State)): void;
 };
 
-async function fetchApi<State, DTO>(
+export type OnFetchType = {
+  onStart?: VoidFunction;
+  onError?: (e: Error) => void;
+  onFinal?: VoidFunction;
+};
+
+export async function fetchApi<State, DTO>(
   set: SetState<State | FetchableState>,
   get: () => State & FetchableState,
   api: () => Promise<DTO>,
   rawDataSetter: (data: DTO) => State | Partial<State>,
-  fetchId: number
+  onFetch?: OnFetchType & {
+    fetchId?: string;
+  }
 ) {
   try {
-    set({ error: null, totalFetches: get().totalFetches + 1 });
+    onFetch?.onStart?.();
+    onFetch?.fetchId && get().fetchesSet.add(onFetch.fetchId);
+
     const data = await api();
-    console.log(data);
     set(rawDataSetter(data));
   } catch (error) {
-    console.error(error);
+    onFetch?.onError?.(error as Error);
     set({ error });
   } finally {
-    get().fetchesSet.delete(fetchId);
+    onFetch?.fetchId && get().fetchesSet.delete(onFetch.fetchId);
+    onFetch?.onFinal?.();
   }
 }
 
@@ -35,12 +47,11 @@ export function fetchStoreApi<State, DTO>(
   set: SetState<State | FetchableState>,
   get: () => State & FetchableState,
   api: () => Promise<DTO>,
-  rawDataSetter: (data: DTO) => State | Partial<State>
+  rawDataSetter: (data: DTO) => State | Partial<State>,
+  onFinal?: VoidFunction
 ) {
-  const fetchId = get().totalFetches;
-  set({ totalFetches: fetchId < 255 ? fetchId + 1 : 0 });
-  get().fetchesSet.add(fetchId);
-
-  fetchApi(set, get, api, rawDataSetter, fetchId);
+  const fetchId = crypto.randomUUID();
+  console.log(fetchId);
+  fetchApi(set, get, api, rawDataSetter, { fetchId, onFinal });
   return fetchId;
 }

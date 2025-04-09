@@ -15,6 +15,7 @@ interface ChooseProductFormProps {
   items?: ProductItem[];
   onClickAddCart?: (productId?: number | null) => void;
   className?: string;
+  loading: boolean;
 }
 
 export const ChooseProductForm: React.FC<ChooseProductFormProps> = ({
@@ -24,6 +25,7 @@ export const ChooseProductForm: React.FC<ChooseProductFormProps> = ({
   ingredients,
   onClickAddCart,
   items,
+  loading,
 }) => {
   const textDetails = "30 см, традиционное тесто 30";
   const totalPrice = 350;
@@ -42,6 +44,7 @@ export const ChooseProductForm: React.FC<ChooseProductFormProps> = ({
         <Title text={name} size="md" className="font-extrabold mb-1" />
         <p className="text-gray-400">{textDetails}</p>
         <Button
+          loading={loading}
           onClick={handleClick}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
         >
