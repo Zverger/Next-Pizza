@@ -26,7 +26,10 @@ interface Props {
   name: string;
   ingredients?: Ingredient[];
   items?: ProductItem[];
-  onClickAddCart?: (productId: number | null, ingredientsId?: number[]) => void;
+  onClickAddCart?: (
+    productId?: number | null,
+    ingredientsId?: number[]
+  ) => void;
   className?: string;
 }
 
@@ -40,9 +43,6 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 }) => {
   const [type, setType] = useState<PizzaType>(1);
   const [size, setSize] = useState<PizzaSize>(20);
-  const selectedProductItemId =
-    items.find((item) => item.pizzaType === type && item.size === size)?.id ||
-    null;
 
   const [selectedIngredients, { toggle: toggleIngredient }] = useSet(
     new Set<number>()
@@ -61,6 +61,9 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   const textDetails = `${size} см, ${mapPizzaType[type]} тесто`;
 
   const handleClickAdd = () => {
+    const selectedProductItemId = items.find(
+      (item) => item.pizzaType === type && item.size === size
+    )?.id;
     onClickAddCart?.(selectedProductItemId, Array.from(selectedIngredients));
   };
   return (

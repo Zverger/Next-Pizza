@@ -29,14 +29,12 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
   const addCartItem = useCartStore((state) => state.addCartItem);
 
   const handleClickAddCartItem = (
-    productId: number | null,
-    ingredientsId: number[] = []
+    productId?: number | null,
+    ingredientsId?: number[]
   ) => {
-    console.log(1);
     if (productId) {
       addCartItem(productId, ingredientsId);
       router.back();
-      console.log(2);
     }
   };
   return (
@@ -60,7 +58,12 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
             onClickAddCart={handleClickAddCartItem}
           />
         ) : (
-          <ChooseProductForm imageUrl={product.imageUrl} name={product.name} />
+          <ChooseProductForm
+            imageUrl={product.imageUrl}
+            name={product.name}
+            items={product.items}
+            onClickAddCart={handleClickAddCartItem}
+          />
         )}
       </DialogContent>
     </Dialog>

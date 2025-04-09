@@ -6,13 +6,14 @@ import { cn } from "@/shared/lib";
 
 import Title from "./title";
 import { Button } from "@/shared/components/ui";
+import { ProductItem } from "@prisma/client";
 
 interface ChooseProductFormProps {
   imageUrl: string;
   name: string;
   ingredients?: any[];
-  items?: any[];
-  onClickAdd?: VoidFunction;
+  items?: ProductItem[];
+  onClickAddCart?: (productId?: number | null) => void;
   className?: string;
 }
 
@@ -21,12 +22,14 @@ export const ChooseProductForm: React.FC<ChooseProductFormProps> = ({
   imageUrl,
   name,
   ingredients,
-  onClickAdd,
+  onClickAddCart,
   items,
 }) => {
   const textDetails = "30 см, традиционное тесто 30";
   const totalPrice = 350;
-  const handleClick = () => {};
+  const handleClick = () => {
+    onClickAddCart?.(items?.[0].id);
+  };
 
   return (
     <div className={cn(className, "flex flex-1")}>
