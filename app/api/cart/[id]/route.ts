@@ -58,7 +58,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Params }) {
 
     const upadetedUserCart = await updateCartTotalAmount(token);
     return NextResponse.json(upadetedUserCart);
-  } catch (e) {
+  } catch {
     const message = "[CART_DELETE] Server error" + error;
     console.log(message);
     return NextResponse.json({ message }, { status: 500 });

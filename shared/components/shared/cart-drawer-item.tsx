@@ -1,12 +1,12 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback } from "react";
 import { cn } from "@/shared/lib";
-
+import { useShallow } from "zustand/react/shallow";
 import * as CartItem from "./cart-item-details";
 import { CountButton } from "./count-button";
 import { TrashIcon } from "lucide-react";
 
 import { SpinnerLoader } from "@/shared/components/ui";
-import { useCartStore } from "@/shared/store";
+import { CartState, useCartStore } from "@/shared/store";
 
 interface CartDrawerItemProps {
   className?: string;
@@ -18,6 +18,10 @@ interface CartDrawerItemProps {
   details: string;
 }
 
+const useUpdateItemQuantitySelector = (state: CartState) =>
+  state.useUpdateItemQuantity;
+const useRemoveCartItemSelector = (state: CartState) => state.useRemoveCartItem;
+
 export const CartDrawerItem: FC<CartDrawerItemProps> = ({
   className,
   id,
@@ -27,11 +31,13 @@ export const CartDrawerItem: FC<CartDrawerItemProps> = ({
   quantity,
   details,
 }) => {
-  const [updateItemQuantity, loadingUpdate, errorUpdate] =
-    useCartStore().useUpdateItemQuantity(id);
+  const [updateItemQuantity, loadingUpdate, errorUpdate] = useCartStore(
+    useShallow(useUpdateItemQuantitySelector)
+  )(id);
 
-  const [removeCartItem, loadingRemove, errorRemove] =
-    useCartStore().useRemoveCartItem(id);
+  const [removeCartItem, loadingRemove, errorRemove] = useCartStore(
+    useShallow(useRemoveCartItemSelector)
+  )(id);
 
   const onClickCountBtn = useCallback(
     (counted: number, setCount: (c: number) => void) => {
@@ -56,7 +62,8 @@ export const CartDrawerItem: FC<CartDrawerItemProps> = ({
           <CountButton
             onCount={onClickCountBtn}
             value={quantity}
-            loading={loadingUpdate || loadingRemove}
+            loading={loadingUpdate}
+            deleting={loadingRemove}
           >
             <SpinnerLoader />
           </CountButton>

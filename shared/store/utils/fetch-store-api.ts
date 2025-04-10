@@ -1,7 +1,5 @@
-import { useState } from "react";
-
 type FetchableState = {
-  error: Error | null | unknown;
+  error?: Error | null | unknown;
 
   fetchesSet: Set<string>;
 };
@@ -17,6 +15,7 @@ export type OnFetchType = {
   onStart?: VoidFunction;
   onError?: (e: Error) => void;
   onFinal?: VoidFunction;
+  onSuccess?: VoidFunction;
 };
 
 export async function fetchApi<State, DTO>(
@@ -30,10 +29,11 @@ export async function fetchApi<State, DTO>(
 ) {
   try {
     onFetch?.onStart?.();
-    onFetch?.fetchId && get().fetchesSet.add(onFetch.fetchId);
-
+    onFetch?.fetchId &&
+      set({ fetchesSet: get().fetchesSet.add(onFetch.fetchId) });
     const data = await api();
     set(rawDataSetter(data));
+    onFetch?.onSuccess?.();
   } catch (error) {
     onFetch?.onError?.(error as Error);
     set({ error });

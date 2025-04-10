@@ -32,9 +32,9 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json(userCart);
-  } catch (error: any) {
+  } catch (error) {
     console.log("[CART_GET] Server error");
-    console.error(error.message);
+    console.error((error as Error)?.message);
 
     return NextResponse.json(
       { message: "Не удалось найти корзину" },
@@ -103,9 +103,9 @@ export async function POST(req: NextRequest) {
     const resp = NextResponse.json(updatedUserCart);
     resp.cookies.set("cartToken", token);
     return resp;
-  } catch (error: any) {
+  } catch (error) {
     console.log("[CART_POST] Server error");
-    console.error(error.message);
+    console.error((error as Error)?.message);
 
     return NextResponse.json(
       { message: "Не удалось создать корзину" },

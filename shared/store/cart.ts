@@ -45,20 +45,10 @@ export interface CartState {
     Error | null
   ];
 
-  //Получение списка товаров из корзины
   fetchCartItems: () => FetchId;
-  /*
-  //запрос на обновление кол-во товара в корзину 
-  updateItemQuantity: (
-    id: number,
-    quantity: number,
-    onFethed?: VoidFunction
-  ) => FetchId;
-  addCartItem: (productItemId: number, ingredientsId?: number[]) => FetchId; //типизировать values
-  removeCartItem: (id: number) => FetchId;
-  */
 }
 
+//веделить хуки в отдельные компоненты, и поработать над оптимизацией, чтобы вызов метода хука не провоцировал ререндер там где не нужно
 export const useCartStore = create<CartState>((set, get) => ({
   items: [],
 
@@ -79,6 +69,8 @@ export const useCartStore = create<CartState>((set, get) => ({
   useUpdateItemQuantity: (id) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
+    const fetchId = crypto.randomUUID();
+
     const fetch = (quantity: number, onFetch?: OnFetchType) =>
       fetchApi(
         set,
@@ -86,6 +78,8 @@ export const useCartStore = create<CartState>((set, get) => ({
         async () => await Api.cart.updateCartQuantity(id, quantity),
         getCartDetails,
         {
+          ...onFetch,
+          fetchId,
           onStart: () => {
             setLoading(true);
             setError(null);
@@ -97,6 +91,7 @@ export const useCartStore = create<CartState>((set, get) => ({
           },
           onFinal: () => {
             setLoading(false);
+
             onFetch?.onFinal?.();
           },
         }
@@ -106,6 +101,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   useRemoveCartItem: (id) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
+    const fetchId = crypto.randomUUID();
     const fetch = (onFetch?: OnFetchType) =>
       fetchApi(
         set,
@@ -113,6 +109,8 @@ export const useCartStore = create<CartState>((set, get) => ({
         async () => await Api.cart.removeCartItem(id),
         getCartDetails,
         {
+          ...onFetch,
+          fetchId,
           onStart: () => {
             setLoading(true);
             setError(null);
@@ -133,6 +131,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   useAddCartItem: () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
+    const fetchId = crypto.randomUUID();
     const fetch = (
       productItemId: number,
       ingredientsId?: number[],
@@ -144,6 +143,8 @@ export const useCartStore = create<CartState>((set, get) => ({
         async () => await Api.cart.addCartItem(productItemId, ingredientsId),
         getCartDetails,
         {
+          ...onFetch,
+          fetchId,
           onStart: () => {
             setLoading(true);
             setError(null);
@@ -161,27 +162,4 @@ export const useCartStore = create<CartState>((set, get) => ({
       );
     return [fetch, loading, error];
   },
-  /*
-  updateItemQuantity: (id, quantity, onFethed) =>
-    fetchStoreApi(
-      set,
-      get,
-      async () => await Api.cart.updateCartQuantity(id, quantity),
-      getCartDetails,
-      onFethed
-    ),
-  addCartItem: (productItemId: number, ingredientsId?: number[]) =>
-    fetchStoreApi(
-      set,
-      get,
-      async () => await Api.cart.addCartItem(productItemId, ingredientsId),
-      getCartDetails
-    ),
-  removeCartItem: (id) =>
-    fetchStoreApi(
-      set,
-      get,
-      async () => await Api.cart.removeCartItem(id),
-      getCartDetails
-    ),*/
 }));

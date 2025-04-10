@@ -6,6 +6,7 @@ import { useDebounce } from "react-use";
 
 export interface CountButtonProps {
   loading?: boolean;
+  deleting?: boolean;
   value?: number;
   size?: "sm" | "lg";
   onCount?: (delta: number, setDelta: (zero: number) => void) => void;
@@ -15,7 +16,15 @@ export interface CountButtonProps {
 }
 
 export const CountButton: FC<CountButtonProps> = memo(
-  ({ value = 1, size = "sm", onCount, className, classNameIcons, loading }) => {
+  ({
+    value = 1,
+    size = "sm",
+    onCount,
+    className,
+    classNameIcons,
+    loading,
+    deleting,
+  }) => {
     const [count, setCount] = useState(0);
 
     useDebounce(
@@ -38,12 +47,12 @@ export const CountButton: FC<CountButtonProps> = memo(
       >
         <CountIconButton
           onClick={onClickCount}
-          disabled={value + count < 2}
+          disabled={value + count < 2 || deleting}
           size={size}
           type="minus"
           className={classNameIcons}
         />
-        {loading ? (
+        {loading || deleting ? (
           <div className=" w-5 h-5 grid rounded-[50%] border-gray-200 border-solid border-2 border-t-black animate-spin"></div>
         ) : (
           <b className={size === "sm" ? "text-sm" : "text-md"}>
@@ -54,6 +63,7 @@ export const CountButton: FC<CountButtonProps> = memo(
           onClick={onClickCount}
           size={size}
           type="plus"
+          disabled={deleting}
           className={classNameIcons}
         />
       </div>

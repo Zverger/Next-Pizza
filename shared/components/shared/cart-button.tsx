@@ -5,16 +5,22 @@ import { CartDrawer } from "./cart-drawer";
 
 import { useCart } from "@/shared/hooks/business/use-cart";
 
+import { cn } from "@/shared/lib";
+
 interface Props {
   className?: string;
 }
 
-export function CartButton(props: Props) {
-  const { items, totalAmount } = useCart();
-
+export function CartButton({ className }: Props) {
+  const { items, isFetching } = useCart();
+  const loading = isFetching();
+  const totalAmount = items.reduce((acc, item) => acc + item.price, 0);
   return (
     <CartDrawer items={items} totalAmount={totalAmount}>
-      <Button className="group relative">
+      <Button
+        loading={loading}
+        className={cn("group relative", { "w-[105px]": loading }, className)}
+      >
         <b>{totalAmount} ₽</b>
         <span className="h-full w-[1px] bg-white/30 mx-3" />
         <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">

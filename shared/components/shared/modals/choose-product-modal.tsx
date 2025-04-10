@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { cn } from "@/shared/lib";
+import { toast } from "react-hot-toast";
 
 import {
   Dialog,
@@ -26,6 +27,7 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
 }) => {
   const router = useRouter();
   const isPizzaForms = Boolean(product.items?.[0].pizzaType);
+
   const [addCartItem, loadingAddCartItem, errorAddCartItem] =
     useCartStore().useAddCartItem();
   const abortBack = useRef(false);
@@ -36,6 +38,10 @@ export const ChooseProductModal: React.FC<ChooseProductModalProps> = ({
   ) => {
     if (productId) {
       addCartItem(productId, ingredientsId, {
+        onError: () =>
+          toast.error(`Ошибка! ${product.name} не добавлена в корзину`),
+        onSuccess: () =>
+          toast.success(`${product.name} успешно добавлена в корзину!`),
         onFinal: () => !abortBack.current && router.back(),
       });
     }

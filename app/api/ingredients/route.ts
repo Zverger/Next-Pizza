@@ -1,6 +1,6 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   return NextResponse.json(await prisma.ingredient.findMany());
 }

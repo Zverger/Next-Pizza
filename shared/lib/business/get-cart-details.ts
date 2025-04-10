@@ -5,7 +5,7 @@ import { calcCartItemTotalPrice } from "./calc-cart-item-total-price";
 
 interface ReturnProps {
   items: CartStateItem[];
-  totalAmountt: number;
+  totalAmount: number;
 }
 
 export const getCartDetails = (data: CartDTO): ReturnProps => {
@@ -24,7 +24,7 @@ export const getCartDetails = (data: CartDTO): ReturnProps => {
   }));
 
   return {
-    totalAmountt: data.totalAmount,
+    totalAmount: data.totalAmount,
     items,
   };
 };
