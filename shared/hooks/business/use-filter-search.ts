@@ -21,15 +21,17 @@ export const useFilterSearch = (): [QueryValues, ChangeStates] => {
     string
   >;
 
-  const [selectedIngredients, { toggle: toggleIngredients }] =
-    useSearchParamsSet(searchParams, "selectedIngredients");
+  const [ingredients, { toggle: toggleIngredients }] = useSearchParamsSet(
+    searchParams,
+    "ingredients"
+  );
   const [pizzaTypes, { toggle: togglePizzaTypes }] = useSearchParamsSet(
     searchParams,
     "pizzaTypes"
   );
-  const [selectedSizes, { toggle: toggleSizes }] = useSearchParamsSet(
+  const [sizes, { toggle: toggleSizes }] = useSearchParamsSet(
     searchParams,
-    "selectedSizes"
+    "sizes"
   );
 
   const [price, setPrice] = useSearchParamsFromTo(
@@ -43,9 +45,9 @@ export const useFilterSearch = (): [QueryValues, ChangeStates] => {
   return [
     {
       price,
-      selectedIngredients,
+      ingredients,
       pizzaTypes,
-      selectedSizes,
+      sizes,
     },
     {
       toggle: {

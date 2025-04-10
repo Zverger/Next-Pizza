@@ -5,20 +5,13 @@ import {
   Filters,
   ProductGroupList,
 } from "@/shared/components/shared";
-import { prisma } from "@/prisma/prisma-client";
-import { Suspense } from "react";
 
-export default async function Home() {
-  const categories = await prisma.category.findMany({
-    include: {
-      products: {
-        include: {
-          items: true,
-          ingredients: true,
-        },
-      },
-    },
-  });
+import { Suspense } from "react";
+import { findPizza, GetSearchParams } from "@/shared/lib";
+import { PageProps } from "@/.next/types/app/layout";
+
+export default async function Home({ searchParams }: PageProps) {
+  const categories = await findPizza((await searchParams) as GetSearchParams);
   return (
     <>
       <Container className="mt-10">
@@ -38,7 +31,7 @@ export default async function Home() {
             <div className="flex flex-col gap-16">
               {categories.map(
                 (cat) =>
-                  cat.products.length && (
+                  cat.products.length > 0 && (
                     <ProductGroupList
                       key={cat.id}
                       title={cat.name}

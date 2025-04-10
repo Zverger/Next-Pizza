@@ -14,8 +14,8 @@ export const useQueryFilterRouter = (
     () => {
       const filters: QueryFilters = {
         pizzaTypes: Array.from(props.pizzaTypes),
-        selectedSizes: Array.from(props.selectedSizes),
-        selectedIngredients: Array.from(props.selectedIngredients),
+        sizes: Array.from(props.sizes),
+        ingredients: Array.from(props.ingredients),
         priceFrom:
           props.price.priceFrom != MIN_PRICE ? props.price.priceFrom : null,
         priceTo: props.price.priceTo != MAX_PRICE ? props.price.priceTo : null,
@@ -28,11 +28,6 @@ export const useQueryFilterRouter = (
       router.push(`?${query}`, { scroll: false });
     },
     delayMs,
-    [
-      props.pizzaTypes,
-      props.selectedSizes,
-      props.selectedIngredients,
-      props.price,
-    ]
+    [props.pizzaTypes, props.sizes, props.ingredients, props.price]
   );
 };

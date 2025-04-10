@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { useSearchParams } from "next/navigation";
-
 type NamedFromTo<N extends string = ""> = {
   [K in
     | `${N}${N extends "" ? "f" : "F"}rom`
